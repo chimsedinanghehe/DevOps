@@ -19,7 +19,7 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build project with Maven
+      - name: Build project with gradle
         run: ./gradlew build -x test
 
       - name: Copy JAR to server via SSH
