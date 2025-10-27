@@ -1,16 +1,15 @@
-name: Deploy Spring Boot App
+name: Build and Push Docker Image
 
 on:
   push:
     branches:
-      - main   # chỉ chạy khi push lên nhánh main
+      - main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -19,27 +18,11 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Grant execute permission for Gradle wrapper
-        run: chmod +x gradlew   
-
-      - name: Build project with gradle
+      - name: Build project
         run: ./gradlew build -x test
 
-      - name: Copy JAR to server via SSH
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "target/*.jar"
-          target: "/home/${{ secrets.SERVER_USER }}/app"
-
-      - name: Restart app on server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            pkill -f 'java -jar' || true
-            nohup java -jar /home/${{ secrets.SERVER_USER }}/app/*.jar > app.log 2>&1 &
+      - name: Build Docker image
+        run: |
+          docker build -t myuser/myapp:latest .
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push myuser/myapp:latest
