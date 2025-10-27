@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Posts hihi</title>
+    <title>Blog Posts</title>
     <style>
         body {
             font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #f4f6f8;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
         }
@@ -16,21 +16,26 @@
             color: white;
             text-align: center;
             padding: 1.5rem 0;
-            font-size: 1.8rem;
-            letter-spacing: 0.5px;
+            font-size: 2rem;
+            font-weight: 600;
         }
 
         main {
             max-width: 700px;
-            margin: 30px auto;
-            background: white;
-            padding: 20px 30px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 25px 35px;
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #0078d7;
+            margin-bottom: 15px;
         }
 
         ul {
-            list-style-type: none;
+            list-style: none;
             padding: 0;
         }
 
@@ -43,14 +48,17 @@
         }
 
         li strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
             color: #0078d7;
         }
 
         form {
-            margin-top: 25px;
+            margin-top: 30px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         label {
@@ -61,7 +69,7 @@
         }
 
         input[type="text"] {
-            padding: 8px 10px;
+            padding: 8px 12px;
             border: 1px solid #ccc;
             border-radius: 5px;
             transition: border-color 0.2s;
@@ -73,11 +81,11 @@
         }
 
         button {
-            align-self: flex-start;
+            width: fit-content;
             background-color: #0078d7;
             color: white;
             border: none;
-            padding: 10px 18px;
+            padding: 10px 20px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
@@ -90,18 +98,18 @@
     </style>
 </head>
 <body>
-<header>📚 Blog Posts hihi</header>
+<header>📚 My Blog Posts</header>
 
 <main>
     <h2>All Posts</h2>
     <ul>
         <li th:each="post : ${posts}">
             <strong th:text="${post.title}"></strong>
-            <p th:text="${post.content}" style="margin: 4px 0 0;"></p>
+            <p th:text="${post.content}" style="margin: 0;"></p>
         </li>
     </ul>
 
-    <h2>Add New Postssss</h2>
+    <h2>Add New Post</h2>
     <form th:action="@{/posts}" th:object="${newPost}" method="post">
         <label>Title:
             <input type="text" th:field="*{title}" placeholder="Enter post title" />
